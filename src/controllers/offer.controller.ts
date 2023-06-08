@@ -1,4 +1,6 @@
 import { FastifyRequest, FastifyReply } from "fastify";
+import multer from "fastify-multer";
+
 import {
   createOffer,
   deleteOffer,
@@ -9,23 +11,25 @@ import {
 } from "../services/offer.service";
 import { createOfferType } from "../models/offer.model";
 
+const storage = multer.memoryStorage();
+const upload = multer({ storage: storage });
+
 export async function createOfferHandler(
   request: FastifyRequest<{
     Body: createOfferType;
   }>,
   response: FastifyReply
 ) {
-  const reqBody = request.body;
+  const parts = request.parts();
+  // const files = request.files();
 
   try {
-    const offer = await createOffer(reqBody);
+    const offer = await createOffer(parts);
 
     return response.code(201).send(offer);
   } catch (error) {
-    if (error) {
-      console.error(error);
-      return response.code(500).send(error);
-    }
+    console.error(error);
+    return response.code(500).send(error);
   }
 }
 
@@ -66,10 +70,8 @@ export async function updateOfferHandler(
 
     return offer;
   } catch (error) {
-    if (error) {
-      console.error(error);
-      return response.code(500).send(error);
-    }
+    console.error(error);
+    return response.code(500).send(error);
   }
 }
 
@@ -86,10 +88,8 @@ export async function updateOfferViewsHandler(
 
     return offer;
   } catch (error) {
-    if (error) {
-      console.error(error);
-      return response.code(500).send(error);
-    }
+    console.error(error);
+    return response.code(500).send(error);
   }
 }
 
@@ -106,9 +106,7 @@ export async function deleteOfferHandler(
 
     return response.code(200);
   } catch (error) {
-    if (error) {
-      console.error(error);
-      return response.code(500).send(error);
-    }
+    console.error(error);
+    return response.code(500).send(error);
   }
 }

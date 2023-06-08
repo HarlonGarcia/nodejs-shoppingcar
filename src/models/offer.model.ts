@@ -27,3 +27,6 @@ const updateOfferSchema = z.object({
 
 export type createOfferType = z.infer<typeof createOfferSchema>;
 export type updateOfferType = z.infer<typeof updateOfferSchema>;
+export type FieldsType = {
+  [key: string]: any;
+};

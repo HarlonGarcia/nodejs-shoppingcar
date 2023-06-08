@@ -1,12 +1,64 @@
-import { createOfferType, updateOfferType } from "../models/offer.model";
+import cloudinary from "cloudinary";
+import { Multipart, MultipartFile } from "@fastify/multipart";
+
 import prisma from "../utils/prisma";
+import {
+  FieldsType,
+  createOfferType,
+  updateOfferType,
+} from "../models/offer.model";
 
-export async function createOffer(body: createOfferType) {
-  const offer = await prisma.offer.create({
-    data: body,
-  });
+export async function createOffer(parts: AsyncIterableIterator<Multipart>) {
+  try {
+    const filesUrl = [];
+    const fields: FieldsType = {};
 
-  return offer;
+    for await (const part of parts) {
+      if (part.type == "file") {
+        const buffer = await part.toBuffer();
+        const base64Image = buffer.toString("base64");
+
+        const uploadedFileResponse = await uploadFiles(part, base64Image);
+
+        filesUrl.push(uploadedFileResponse.secure_url);
+      } else {
+        const fieldValue = part.value;
+        fields[part.fieldname] = fieldValue;
+      }
+    }
+
+    const offerData: createOfferType = {
+      registrationDate: new Date(),
+      brand: fields.brand,
+      model: fields.model,
+      year: fields.year,
+      price: parseFloat(fields.price),
+      color: fields.color,
+      mileage: fields.mileage,
+      licensePlate: fields.licensePlate,
+      city: fields.city,
+      photos: filesUrl,
+      views: 0,
+    };
+
+    const offer = await prisma.offer.create({
+      data: offerData,
+    });
+
+    return offer;
+  } catch (error) {
+    console.error(error);
+    throw new Error("Failed to create an offer!");
+  }
+}
+
+async function uploadFiles(part: MultipartFile, base64Image: string) {
+  return await cloudinary.v2.uploader.upload(
+    `data:${part.mimetype};base64,${base64Image}`,
+    {
+      resource_type: "image",
+    }
+  );
 }
 
 export async function getOffers() {
