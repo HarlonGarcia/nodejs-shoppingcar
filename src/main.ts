@@ -1,6 +1,6 @@
 import Fastify from "fastify";
 
-import offerRoutes from "./routes/offer.route";
+import offerRoutes from "./routes/offer.routes";
 
 const server = Fastify();
 

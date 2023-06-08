@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-const createOfferSchema = z.object({
+const offerCommonSchema = {
   brand: z.string(),
   model: z.string(),
   year: z.string(),
@@ -13,8 +13,17 @@ const createOfferSchema = z.object({
   }),
   city: z.string(),
   photos: z.array(z.string()),
-  registrationDate: z.date(),
   views: z.number(),
+};
+
+const createOfferSchema = z.object({
+  ...offerCommonSchema,
+  registrationDate: z.date(),
+});
+
+const updateOfferSchema = z.object({
+  ...offerCommonSchema,
 });
 
 export type createOfferType = z.infer<typeof createOfferSchema>;
+export type updateOfferType = z.infer<typeof updateOfferSchema>;
