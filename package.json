@@ -4,7 +4,8 @@
   "main": "index.js",
   "license": "MIT",
   "scripts": {
-    "dev": "tsnd --respawn --transpile-only --exit-child src/main.ts"
+    "dev": "tsnd --respawn --transpile-only --exit-child src/main.ts",
+    "build": "tsup src"
   },
   "dependencies": {
     "@fastify/multipart": "^7.6.0",
