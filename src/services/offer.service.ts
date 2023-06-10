@@ -77,6 +77,12 @@ export async function getOfferById(offerId: number) {
       id: Number(offerId),
     },
   });
+
+  if (offer) {
+    return offer;
+  }
+
+  throw new Error(`This offer with id ${offerId} doesn't exist!`);
 }
 
 export async function getOffersByPrice(price: number) {
