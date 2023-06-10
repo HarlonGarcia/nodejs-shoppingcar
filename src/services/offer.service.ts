@@ -74,7 +74,7 @@ export async function getOffers() {
 export async function getOfferById(offerId: number) {
   const offer = await prisma.offer.findUnique({
     where: {
-      id: offerId,
+      id: Number(offerId),
     },
   });
 }
