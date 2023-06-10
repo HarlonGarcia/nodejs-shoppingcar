@@ -1,0 +1,15 @@
+{
+  "version": 2,
+  "builds": [
+    {
+      "src": "arc/main.ts",
+      "use": "@vercel/node"
+    } 
+  ],
+  "routes": [
+    {
+      "src": "(.*)",
+      "dest": "src/main.ts"
+    }
+  ]
+}
