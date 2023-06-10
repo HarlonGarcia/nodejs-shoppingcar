@@ -1,7 +1,7 @@
 import Fastify, { FastifyInstance } from "fastify";
 import multipart from "@fastify/multipart";
 import cloudinary from "cloudinary";
-import fastifyCors from "fastify-cors";
+import fastifyCors from "@fastify/cors";
 
 import offerRoutes from "./routes/offer.routes";
 
