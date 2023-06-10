@@ -1,10 +1,17 @@
-import Fastify from "fastify";
+import Fastify, { FastifyInstance } from "fastify";
 import multipart from "@fastify/multipart";
 import cloudinary from "cloudinary";
+import fastifyCors from "fastify-cors";
 
 import offerRoutes from "./routes/offer.routes";
 
 const server = Fastify();
+
+server.register(fastifyCors, {
+  origin: "*",
+  methods: "*",
+  allowedHeaders: "*",
+});
 
 server.get("/works", async function name(request, response) {
   return { status: "OK" };
