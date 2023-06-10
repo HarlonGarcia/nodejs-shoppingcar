@@ -4,6 +4,7 @@ import multer from "fastify-multer";
 import {
   createOffer,
   deleteOffer,
+  getOfferById,
   getOffers,
   getOffersByPrice,
   updateOffer,
@@ -21,7 +22,6 @@ export async function createOfferHandler(
   response: FastifyReply
 ) {
   const parts = request.parts();
-  // const files = request.files();
 
   try {
     const offer = await createOffer(parts);
@@ -31,6 +31,19 @@ export async function createOfferHandler(
     console.error(error);
     return response.code(500).send(error);
   }
+}
+
+export async function getOfferByIdHandler(
+  request: FastifyRequest<{
+    Params: { id: number };
+  }>,
+  response: FastifyReply
+) {
+  const { id } = request.params;
+
+  const offer = await getOfferById(id);
+
+  return offer;
 }
 
 export async function getOffersHandler(
@@ -49,7 +62,7 @@ export async function getOffersByPriceHandler(
   response: FastifyReply
 ) {
   const { price } = request.query;
-  console.log(price);
+
   const offers = await getOffersByPrice(price);
 
   return offers;

@@ -62,16 +62,28 @@ async function uploadFiles(part: MultipartFile, base64Image: string) {
 }
 
 export async function getOffers() {
-  const offers = await prisma.offer.findMany();
+  const offers = await prisma.offer.findMany({
+    orderBy: {
+      model: "asc",
+    },
+  });
 
   return offers;
+}
+
+export async function getOfferById(offerId: number) {
+  const offer = await prisma.offer.findUnique({
+    where: {
+      id: offerId,
+    },
+  });
 }
 
 export async function getOffersByPrice(price: number) {
   const offers = await prisma.offer.findMany({
     where: {
       price: {
-        gt: price,
+        lt: price,
       },
     },
   });
