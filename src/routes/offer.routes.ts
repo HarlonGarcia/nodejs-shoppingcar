@@ -7,6 +7,7 @@ import {
   updateOfferHandler,
   updateOfferViewsHandler,
   deleteOfferHandler,
+  getOfferByIdHandler,
 } from "../controllers/offer.controller";
 
 async function offerRoutes(server: FastifyInstance) {
@@ -19,6 +20,8 @@ async function offerRoutes(server: FastifyInstance) {
     },
   };
   server.get("/filter", priceParamOptions, getOffersByPriceHandler);
+
+  server.get("/:id", getOfferByIdHandler);
 
   server.get("/", getOffersHandler);
 
