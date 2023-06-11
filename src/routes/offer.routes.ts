@@ -12,26 +12,17 @@ import {
 } from "../controllers/offer.controller";
 
 async function offerRoutes(server: FastifyInstance) {
-  const modelParamOptions = {
+  const paramsOptions = {
     schema: {
-      querystring: {
-        startsWith: { type: "string" },
-        require: true,
+      params: {
+        type: "object",
+        properties: {
+          startsWith: { type: "string", minLength: 1 },
+        },
       },
     },
   };
-
-  const priceParamOptions = {
-    schema: {
-      querystring: {
-        price: { type: "number" },
-        require: true,
-      },
-    },
-  };
-  server.get("/filter", modelParamOptions, getOfferByModelHandler);
-
-  server.get("/filter", priceParamOptions, getOffersByPriceHandler);
+  server.get("/filter", paramsOptions, getOfferByModelHandler);
 
   server.get("/:id", getOfferByIdHandler);
 
