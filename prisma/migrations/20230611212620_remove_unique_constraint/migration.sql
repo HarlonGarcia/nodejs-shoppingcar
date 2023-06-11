@@ -15,6 +15,3 @@ CREATE TABLE "Offer" (
 
     CONSTRAINT "Offer_pkey" PRIMARY KEY ("id")
 );
-
--- CreateIndex
-CREATE UNIQUE INDEX "Offer_licensePlate_key" ON "Offer"("licensePlate");
