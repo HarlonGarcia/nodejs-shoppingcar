@@ -29,7 +29,7 @@ async function offerRoutes(server: FastifyInstance) {
       },
     },
   };
-  server.get("/filter/:startsWith", modelParamOptions, getOfferByModelHandler);
+  server.get("/filter", modelParamOptions, getOfferByModelHandler);
 
   server.get("/filter", priceParamOptions, getOffersByPriceHandler);
 
