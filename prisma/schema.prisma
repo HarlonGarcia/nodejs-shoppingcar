@@ -18,7 +18,7 @@ model Offer {
   price            Float
   color            String
   mileage          String
-  licensePlate     String   @unique
+  licensePlate     String 
   city             String
   photos           String[]
   registrationDate DateTime @default(now())
