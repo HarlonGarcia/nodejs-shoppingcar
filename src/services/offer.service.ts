@@ -97,6 +97,16 @@ export async function getOffersByPrice(price: number) {
   return offers;
 }
 
+export async function getOfferByModel(startsWith: string) {
+  const offers = await prisma.offer.findMany({
+    where: {
+      model: startsWith,
+    },
+  });
+
+  return offers;
+}
+
 export async function updateOffer(offerId: number, body: updateOfferType) {
   const offers = await prisma.offer.update({
     where: {

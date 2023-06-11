@@ -8,9 +8,19 @@ import {
   updateOfferViewsHandler,
   deleteOfferHandler,
   getOfferByIdHandler,
+  getOfferByModelHandler,
 } from "../controllers/offer.controller";
 
 async function offerRoutes(server: FastifyInstance) {
+  const modelParamOptions = {
+    schema: {
+      querystring: {
+        startsWith: { type: "string" },
+        require: true,
+      },
+    },
+  };
+
   const priceParamOptions = {
     schema: {
       querystring: {
@@ -19,6 +29,8 @@ async function offerRoutes(server: FastifyInstance) {
       },
     },
   };
+  server.get("/filter/:startsWith", modelParamOptions, getOfferByModelHandler);
+
   server.get("/filter", priceParamOptions, getOffersByPriceHandler);
 
   server.get("/:id", getOfferByIdHandler);

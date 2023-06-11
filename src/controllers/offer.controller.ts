@@ -5,6 +5,7 @@ import {
   createOffer,
   deleteOffer,
   getOfferById,
+  getOfferByModel,
   getOffers,
   getOffersByPrice,
   updateOffer,
@@ -64,6 +65,19 @@ export async function getOffersByPriceHandler(
   const { price } = request.query;
 
   const offers = await getOffersByPrice(price);
+
+  return offers;
+}
+
+export async function getOfferByModelHandler(
+  request: FastifyRequest<{
+    Querystring: { startsWith: string };
+  }>,
+  response: FastifyReply
+) {
+  const { startsWith } = request.query;
+
+  const offers = await getOfferByModel(startsWith);
 
   return offers;
 }
