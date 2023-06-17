@@ -16,6 +16,11 @@ export async function createOffer(parts: AsyncIterableIterator<Multipart>) {
     for await (const part of parts) {
       if (part.type == "file") {
         const buffer = await part.toBuffer();
+
+        if (part.file.truncated) {
+          throw new Error("File too large!");
+        }
+
         const base64Image = buffer.toString("base64");
 
         const uploadedFileResponse = await uploadFiles(part, base64Image);
@@ -47,7 +52,6 @@ export async function createOffer(parts: AsyncIterableIterator<Multipart>) {
 
     return offer;
   } catch (error) {
-    console.error(error);
     throw new Error("Failed to create an offer!");
   }
 }
@@ -100,7 +104,10 @@ export async function getOffersByPrice(price: number) {
 export async function getOfferByModel(startsWith: string) {
   const offers = await prisma.offer.findMany({
     where: {
-      model: startsWith,
+      model: {
+        startsWith: startsWith,
+        mode: "insensitive",
+      },
     },
   });
 
@@ -134,19 +141,15 @@ export async function updateOfferViews(offerId: number) {
 }
 
 export async function deleteOffer(offerId: number) {
-  const existentOffer = await prisma.offer.findUnique({
-    where: { id: Number(offerId) },
-  });
+  console.log(offerId);
 
-  if (existentOffer) {
-    const offer = await prisma.offer.delete({
+  try {
+    await prisma.offer.delete({
       where: {
         id: Number(offerId),
       },
     });
-
-    return offer;
+  } catch (error) {
+    throw new Error(`This offer with id ${offerId} doesn't exist!`);
   }
-
-  throw new Error(`This offer with id ${offerId} doesn't exist!`);
 }

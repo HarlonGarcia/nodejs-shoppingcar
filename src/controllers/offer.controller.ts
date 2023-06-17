@@ -14,7 +14,6 @@ import {
 import { createOfferType } from "../models/offer.model";
 
 const storage = multer.memoryStorage();
-const upload = multer({ storage: storage });
 
 export async function createOfferHandler(
   request: FastifyRequest<{
@@ -129,9 +128,9 @@ export async function deleteOfferHandler(
   const id = request.params.id;
 
   try {
-    const offer = await deleteOffer(id);
+    await deleteOffer(id);
 
-    return response.code(200);
+    return response.code(200).send("Offer deleted");
   } catch (error) {
     console.error(error);
     return response.code(500).send(error);
